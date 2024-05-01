@@ -58,15 +58,10 @@ trap(struct trapframe *tf)
     lapiceoi();
     if(myproc())
     {
-      cprintf("thread : %d", myproc()->scheduler);
-      if(ticks % 1000 == 0)
-        cprintf("tick : %d", ticks);
-      if(myproc()->scheduler != 0 && myproc()->thread >= 1 && ticks % 1000 == 0)
+      if (ticks % 100 == 0 && myproc()->scheduler != 0 && myproc()->thread >= 1)
       {
-        cprintf("thread : %d", myproc()->thread);
-        void (*scheduler_ptr)(void) = (void (*)(void))(myproc()->scheduler);
-        scheduler_ptr();
-        cprintf("start\n");
+        cprintf("thread : %d\n", myproc()->thread);
+        myproc()->tf->eip = myproc()->scheduler;
       }
     }
     break;

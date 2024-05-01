@@ -27,7 +27,7 @@ static int num_thread = 0;
 
 static void thread_schedule(void);
 
-void thread_init(void)
+void thread_init(void (*func)())
 {
   // main() is thread 0, which will make the first invocation to
   // thread_schedule().  it needs a stack so that the first thread_switch() can
@@ -38,42 +38,54 @@ void thread_init(void)
   current_thread->state = RUNNING;
   num_thread = 0;
   thread_num(num_thread);
-  uthread_init((uint)thread_schedule);
+  uthread_init((uint)func);
 }
 
 static void
 thread_schedule(void)
 {
+  printf(1, "start 1\n");
+  //if(current_thread->state != FREE)
+  //{
+  //  current_thread->state = RUNNABLE;
+  //  printf(1, "start 2\n");
+  //}
+  printf(1, "start 3\n");
   thread_p t;
-
   /* Find another runnable thread. */
   next_thread = 0;
   for (t = all_thread; t < all_thread + MAX_THREAD; t++)
   {
     if (t->state == RUNNABLE && t != current_thread)
     {
+      printf(1, "start 4\n");
       next_thread = t;
       break;
     }
   }
-
+  printf(1, "start 5\n");
   if (t >= all_thread + MAX_THREAD && current_thread->state == RUNNABLE)
   {
     /* The current thread is the only runnable thread; run it. */
     next_thread = current_thread;
+    printf(1, "start 6\n");
   }
-
+  printf(1, "start 7\n");
   if (next_thread == 0)
   {
+    printf(1, "start 8\n");
     printf(2, "thread_schedule: no runnable threads\n");
     exit();
   }
-
+  printf(1, "start 9\n");
   if (current_thread != next_thread)
   { /* switch threads?  */
     next_thread->state = RUNNING;
+    printf(1, "start 10\n");
     thread_switch();
+    printf(1, "start 11\n");
   }
+  
   else
     next_thread = 0;
 }
@@ -122,7 +134,7 @@ mythread(void)
 int main(int argc, char *argv[])
 {
   printf(1, "addr : %d", (uint)thread_schedule);
-  thread_init();
+  thread_init(thread_schedule);
   thread_create(mythread);
   thread_create(mythread);
   thread_schedule();
