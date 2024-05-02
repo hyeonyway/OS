@@ -45,12 +45,12 @@ static void
 thread_schedule(void)
 {
   printf(1, "start 1\n");
-  //if(current_thread->state != FREE)
-  //{
-  //  current_thread->state = RUNNABLE;
-  //  printf(1, "start 2\n");
-  //}
+  if(current_thread->state != FREE)
+  {
+    current_thread->state = RUNNABLE; 
+  }
   printf(1, "start 3\n");
+  printf(1, "current thread addr : %d\n", &current_thread);
   thread_p t;
   /* Find another runnable thread. */
   next_thread = 0;
@@ -77,17 +77,18 @@ thread_schedule(void)
     printf(2, "thread_schedule: no runnable threads\n");
     exit();
   }
+  printf(1, "middle current thread addr : %d\n", &current_thread);
   printf(1, "start 9\n");
   if (current_thread != next_thread)
   { /* switch threads?  */
     next_thread->state = RUNNING;
     printf(1, "start 10\n");
     thread_switch();
-    printf(1, "start 11\n");
   }
   
   else
     next_thread = 0;
+  printf(1, "end current thread addr : %d\n", &current_thread);
 }
 
 void thread_create(void (*func)())
@@ -136,7 +137,10 @@ int main(int argc, char *argv[])
   printf(1, "addr : %d", (uint)thread_schedule);
   thread_init(thread_schedule);
   thread_create(mythread);
+  printf(1, "a\n");
   thread_create(mythread);
+  printf(1, "b\n");
   thread_schedule();
+  printf(1, "c\n");
   return 0;
 }

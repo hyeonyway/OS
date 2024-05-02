@@ -11804,14 +11804,14 @@ trap(struct trapframe *tf)
 80106019:	85 c0                	test   %eax,%eax
 8010601b:	0f 84 9e 01 00 00    	je     801061bf <trap+0x260>
     {
-      if (ticks % 100 == 0 && myproc()->scheduler != 0 && myproc()->thread >= 1)
+      if (ticks % 50 == 0 && myproc()->scheduler != 0 && myproc()->thread >= 1)
 80106021:	8b 0d 74 6b 19 80    	mov    0x80196b74,%ecx
 80106027:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
 8010602c:	89 c8                	mov    %ecx,%eax
 8010602e:	f7 e2                	mul    %edx
 80106030:	89 d0                	mov    %edx,%eax
-80106032:	c1 e8 05             	shr    $0x5,%eax
-80106035:	6b d0 64             	imul   $0x64,%eax,%edx
+80106032:	c1 e8 04             	shr    $0x4,%eax
+80106035:	6b d0 32             	imul   $0x32,%eax,%edx
 80106038:	89 c8                	mov    %ecx,%eax
 8010603a:	29 d0                	sub    %edx,%eax
 8010603c:	85 c0                	test   %eax,%eax

@@ -58,7 +58,7 @@ trap(struct trapframe *tf)
     lapiceoi();
     if(myproc())
     {
-      if (ticks % 100 == 0 && myproc()->scheduler != 0 && myproc()->thread >= 1)
+      if (ticks % 50 == 0 && myproc()->scheduler != 0 && myproc()->thread >= 1)
       {
         cprintf("thread : %d\n", myproc()->thread);
         myproc()->tf->eip = myproc()->scheduler;
