@@ -538,7 +538,3 @@ procdump(void)
     cprintf("\n");
   }
 }
-
-int uthread_init(int address);   // address of the user-level scheduler;
-
-int thread_num(int address);

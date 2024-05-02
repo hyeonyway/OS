@@ -44,13 +44,10 @@ void thread_init(void (*func)())
 static void
 thread_schedule(void)
 {
-  printf(1, "start 1\n");
-  if(current_thread->state != FREE)
+  if (current_thread->state != FREE && current_thread != &all_thread[0])
   {
-    current_thread->state = RUNNABLE; 
+    current_thread->state = RUNNABLE;
   }
-  printf(1, "start 3\n");
-  printf(1, "current thread addr : %d\n", &current_thread);
   thread_p t;
   /* Find another runnable thread. */
   next_thread = 0;
@@ -58,37 +55,28 @@ thread_schedule(void)
   {
     if (t->state == RUNNABLE && t != current_thread)
     {
-      printf(1, "start 4\n");
       next_thread = t;
       break;
     }
   }
-  printf(1, "start 5\n");
   if (t >= all_thread + MAX_THREAD && current_thread->state == RUNNABLE)
   {
     /* The current thread is the only runnable thread; run it. */
     next_thread = current_thread;
-    printf(1, "start 6\n");
   }
-  printf(1, "start 7\n");
   if (next_thread == 0)
   {
-    printf(1, "start 8\n");
     printf(2, "thread_schedule: no runnable threads\n");
     exit();
   }
-  printf(1, "middle current thread addr : %d\n", &current_thread);
-  printf(1, "start 9\n");
   if (current_thread != next_thread)
   { /* switch threads?  */
     next_thread->state = RUNNING;
-    printf(1, "start 10\n");
     thread_switch();
   }
-  
+
   else
     next_thread = 0;
-  printf(1, "end current thread addr : %d\n", &current_thread);
 }
 
 void thread_create(void (*func)())
@@ -106,7 +94,6 @@ void thread_create(void (*func)())
   *(int *)(t->sp) = (int)func;          // push return address on stack
   t->sp -= 32;                          // space for registers that thread_switch expects
   t->state = RUNNABLE;
-  
 }
 
 void thread_yield(void)
@@ -122,7 +109,7 @@ mythread(void)
   printf(1, "my thread running\n");
   for (i = 0; i < 100; i++)
   {
-    printf(1, "%d my thread 0x%x\n", i, (int)current_thread);
+    printf(1, "my thread 0x%x\n", (int)current_thread);
     // thread_yield();
   }
   printf(1, "my thread: exit\n");
@@ -134,13 +121,9 @@ mythread(void)
 
 int main(int argc, char *argv[])
 {
-  printf(1, "addr : %d", (uint)thread_schedule);
   thread_init(thread_schedule);
   thread_create(mythread);
-  printf(1, "a\n");
   thread_create(mythread);
-  printf(1, "b\n");
   thread_schedule();
-  printf(1, "c\n");
   return 0;
 }

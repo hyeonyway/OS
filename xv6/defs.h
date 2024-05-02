@@ -120,8 +120,6 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-int             uthread_init(int);
-int             thread_num(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

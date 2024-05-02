@@ -91,7 +91,7 @@ sys_uptime(void)
 }
 
 int
-sys_uthread_init(void) // syscall 실행은 됨
+sys_uthread_init(void) // get thread_schdule's address
 {
   struct proc *p;
   int func;
@@ -106,7 +106,7 @@ sys_uthread_init(void) // syscall 실행은 됨
 }
 
 int
-sys_thread_num(void)
+sys_thread_num(void) // get uthread's count
 {
   struct proc *p;
   int thread;
